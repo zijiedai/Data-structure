@@ -31,7 +31,213 @@ Boolean Empty()     empty list?                         O(1)
 AddBefore(Node,key) Add key before the node             O(n)
 Addafter(Node,key)  Add key after the node              O(1)
  --
- ----
+ While coding, I also discovered that we need to consider 3 situations when fullfilling
+ the structure:
+ 1\ head=tail=NULL
+ head->NULL
+ tail->NULL
+ 2\head=tail!=NULL
+ head->Node1;
+ tail->Node1;
+ 3\head!=tail!=NULL
+ head->Node1->Node2;
+ tail->Node2;
+ --
+ Implementation:
+ 
+ ---
+ #include <iostream>
+using namespace std;
+struct List
+{
+    int key;
+    List* point;
+};
+typedef List* ListP;
+void PushFront(int, ListP&,ListP&);
+int TopFront(ListP);
+void PopFront(ListP&);
+int TopBack(ListP&);
+void PushBack(int, ListP&, ListP&);
+void PopBack(ListP& tail,ListP&);
+bool find(int key, const ListP&);
+bool Empty(ListP);
+void Print(ListP&);
+//Warning: Don't use these 2 functions to replace 
+//         PushFront and Pushback
+void AddBefore(ListP&, int,ListP&,ListP&);
+void AddAfter(ListP&, int,ListP&);
+int main()
+{
+//Testing cases: 
+    ListP head,tail;
+    head = NULL;
+    tail = NULL;
+    PushFront(12, head, tail);
+    Print(head);
+    PushBack(13, head, tail);
+    Print(head);
+    cout << "First element: " << TopFront(head) << endl;
+    cout << "Last element: " << TopBack(tail) << endl;
+    AddBefore(tail, 5, tail,head);
+    Print(head);
+    if (find(5, head))
+        cout << "Found.\n";
+    else
+        cout << "Not found\n";
+    AddAfter(head->point, 4, tail);
+    Print(head);
+
+
+    
+}
+void PushFront(int a, ListP& head,ListP& tail)
+{
+    ListP temp;
+    temp = new List;
+    temp->key = a;
+    temp->point = head;
+    head = temp;
+    if (tail == NULL)
+        tail = head;
+}
+int TopFront(ListP head)
+{
+    if (head == NULL)
+    {
+        cout << "There are no elements in the list.\n";
+        exit(1);
+    }
+    return (head->key);
+}
+void PopFront(ListP& head)
+{
+    if (head == NULL)
+    {
+        cout << "There are no elements in the list.\n";
+        exit(1);
+    }
+    head = head->point;
+}
+void PushBack(int key, ListP& head, ListP& tail)
+{
+    ListP temp;
+    temp = new List;
+    temp->key = key;
+    temp->point = NULL;
+    if (tail == NULL)
+    {
+        head = temp;
+        tail = head;
+    }
+    else
+    {
+
+        tail->point = temp;
+        tail = temp;
+    }
+}
+int TopBack(ListP& tail)
+{
+    if (tail == NULL)
+    {
+        cout << "There are no elements in the list.\n";
+        exit(1);
+    }
+    else
+        return(tail->key);
+}
+void PopBack(ListP& tail,ListP& head)
+{
+    if (tail == NULL)
+    {
+        cout << "Error:There are no other elements.\n";
+        exit(1);
+    }
+    else if (tail == head)
+    {
+        head = NULL;
+        tail = NULL;
+    }
+    else
+    {
+        ListP temp;
+        temp = head;
+        while ((temp->point->point) != NULL)
+        {
+            temp = temp->point;
+        }
+        temp->point = NULL;
+        tail = temp;
+    }
+}
+bool find(int key, const ListP& head)
+{
+    if (head == NULL)
+    {
+        cout << "Error: There are no any elements.\n";
+        exit(1);
+    }
+    else
+    {
+        ListP s = head;
+        while (s->point != NULL)
+        {
+            if (s->key == key)
+                return true;
+            s = s->point;
+        }
+        if (s->key == key)
+            return true;
+        return false;
+    }
+}
+bool Empty(ListP& head)
+{
+    if (head == NULL)
+        return true;
+    else
+        return false;
+}
+void AddBefore(ListP& Node, int key,ListP& tail,ListP& head)
+{
+    ListP temp;
+    ListP s;
+    s = head;
+    while ((s->point != Node)&&(s->point!=NULL))
+        s = s->point;
+    temp = new List;
+    temp->key = key;
+    temp->point = Node;
+    s->point = temp;
+    if (Node == NULL)
+        tail = Node;
+}
+void AddAfter(ListP& Node, int key, ListP& tail)
+{
+    ListP temp;
+    temp = new List;
+    temp->key = key;
+    temp->point = Node->point;
+    Node->point = temp;
+    if (tail == Node)
+        tail = Node->point;
+
+}
+void Print(ListP& head)
+{
+    ListP temp;
+    temp = head;
+    while (temp != NULL)
+    {
+        cout << temp->key << " ->> ";
+        temp = temp->point;
+    }
+    cout << endl;
+}
+---
+
+
  Doubly_Linked Lists
  
  
