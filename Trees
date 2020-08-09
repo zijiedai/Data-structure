@@ -1,0 +1,29 @@
+----
+Definition:
+1\Empty or
+2\A node with a key and a list of child trees
+
+Eg:
+ 1\Empty:
+             
+ 2\Tree with one node
+                                        Les
+ 3\Tree with two nodes:               
+ 
+                                         Les
+                                        /    \
+                                     Cathy  Sally
+                                     
+---
+Terminology:
+  Root: Top node in the tree
+  Ancestor: parent or parent of parent
+  Descendants: child or child of child
+  Sibiling: have the same parents
+  Leaf: node with no children
+  level:1+num edges between root and node
+  Height: Maximum depth of subtree node and farthest leaf
+  
+  
+  
+  
